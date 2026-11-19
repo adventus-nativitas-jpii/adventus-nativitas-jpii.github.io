@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Advent and Christmas with Saint John Paul II",
+  "short_name": "Advent with JPII",
+  "description": "One daily text by Saint John Paul II for Advent and Christmas.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#211829",
+  "theme_color": "#211829",
+  "icons": [
+    {"src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}
