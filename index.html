@@ -71,6 +71,9 @@ h3{color:var(--plum);margin:0 0 .25rem}
 .welcome label{color:#f6e4c3}
 .welcome select{color:var(--ink)}
 .welcome button{margin-top:1rem;background:#eed2a0;color:#211829;border-color:#eed2a0;font-weight:700;width:100%}
+.install-guide{margin-top:1.15rem;border-top:1px solid #ffffff33;padding-top:.65rem}
+.install-guide summary{cursor:pointer;color:var(--gold);font-weight:700}
+.install-guide p{font-size:.9rem;line-height:1.5;margin:.65rem 0 0}
 .back-welcome{display:inline-block;margin-bottom:.85rem}
 @media(max-width:680px){.welcome{grid-template-columns:1fr;align-content:center}.welcome-frame{background:radial-gradient(ellipse at 50% 26%,#362637 0%,var(--night) 64%)}.welcome-art{height:clamp(240px,44svh,430px);width:min(100%,460px);object-fit:cover;object-position:50% 43%}.welcome-panel{padding:.2rem 0 2rem}.welcome h1{margin-top:0}}
 </style>
@@ -84,6 +87,11 @@ h3{color:var(--plum);margin:0 0 .25rem}
       <label for="welcome-language" id="welcome-label">Language</label>
       <select id="welcome-language"></select>
       <button type="button" id="enter">Begin reading</button>
+      <details class="install-guide">
+        <summary id="install-label">Install on your phone</summary>
+        <p><strong>iPhone · Safari</strong><br><span id="install-iphone"></span></p>
+        <p><strong>Android · Chrome</strong><br><span id="install-android"></span></p>
+      </details>
     </div>
   </div>
 </section>
@@ -172,6 +180,53 @@ const welcomeLabels = {
   'zh-Hans':['开始阅读','欢迎','这篇选读的正文仍在准备中。'],
   nl:['Begin met lezen','Welkom','De tekst van deze lezing is in voorbereiding.'],
 };
+const installLabels = {
+  en:[
+    'Install on your phone',
+    'Open this site in Safari. Tap Share (in the page menu if needed), then Add to Home Screen. Turn on Open as Web App if shown, then tap Add.',
+    'Open this site in Chrome. Tap ⋮, then Install and create shortcut (or Add to Home screen). Choose Install and confirm.',
+  ],
+  es:[
+    'Instalar en el móvil',
+    'Abre este sitio en Safari. Toca Compartir (en el menú de la página, si hace falta) y luego Añadir a pantalla de inicio. Si aparece «Abrir como app web», actívalo y toca Añadir.',
+    'Abre este sitio en Chrome. Toca ⋮ y luego elige la opción de instalación o de añadir a la pantalla de inicio. Toca Instalar y confirma.',
+  ],
+  it:[
+    'Installa sul telefono',
+    'Apri questo sito in Safari. Tocca Condividi (nel menu della pagina, se necessario), poi Aggiungi alla schermata Home. Se compare «Apri come app web», attivalo e tocca Aggiungi.',
+    'Apri questo sito in Chrome. Tocca ⋮, poi scegli di installare l’app o di aggiungerla alla schermata Home. Tocca Installa e conferma.',
+  ],
+  fr:[
+    'Installer sur votre téléphone',
+    'Ouvrez ce site dans Safari. Touchez Partager (dans le menu de la page si nécessaire), puis Sur l’écran d’accueil. Si l’option « Ouvrir comme app web » apparaît, activez-la, puis touchez Ajouter.',
+    'Ouvrez ce site dans Chrome. Touchez ⋮, puis choisissez l’option pour installer l’application ou l’ajouter à l’écran d’accueil. Touchez Installer et confirmez.',
+  ],
+  pt:[
+    'Instalar no telemóvel ou celular',
+    'Abra este site no Safari. Toque em Compartilhar ou Partilhar (no menu da página, se necessário) e adicione à tela ou ao ecrã de início. Se aparecer a opção de abrir como app web, ative-a e toque em Adicionar.',
+    'Abra este site no Chrome. Toque em ⋮ e escolha a opção de instalar o app ou adicioná-lo à tela ou ao ecrã de início. Toque em Instalar e confirme.',
+  ],
+  de:[
+    'Auf dem Smartphone installieren',
+    'Öffne diese Website in Safari. Tippe auf „Teilen“ (bei Bedarf im Seitenmenü) und dann auf „Zum Home-Bildschirm“. Falls „Als Web-App öffnen“ angezeigt wird, aktiviere die Option und tippe auf „Hinzufügen“.',
+    'Öffne diese Website in Chrome. Tippe auf ⋮ und wähle die Option zum Installieren oder zum Hinzufügen zum Startbildschirm. Tippe auf „Installieren“ und bestätige.',
+  ],
+  'zh-Hant':[
+    '安裝到手機',
+    '在 Safari 開啟此網站。點一下「分享」（如有需要，先打開頁面選單），再選「加入主畫面」。若看到「以網頁 App 開啟」，請啟用，然後點「加入」。',
+    '在 Chrome 開啟此網站。點一下 ⋮，選擇安裝或加入主畫面的選項。點「安裝」並確認。',
+  ],
+  'zh-Hans':[
+    '安装到手机',
+    '在 Safari 打开此网站。轻点「分享」（如有需要，先打开页面菜单），再选择「添加到主屏幕」。如果看到「作为网页 App 打开」，请开启，然后轻点「添加」。',
+    '在 Chrome 打开此网站。轻点 ⋮，选择安装或添加到主屏幕的选项。轻点「安装」并确认。',
+  ],
+  nl:[
+    'Op je telefoon installeren',
+    'Open deze site in Safari. Tik op Deel (zo nodig in het paginamenu) en vervolgens op Zet op beginscherm. Schakel ‘Open als webapp’ in als die optie verschijnt en tik op Voeg toe.',
+    'Open deze site in Chrome. Tik op ⋮ en kies de optie om de app te installeren of aan je startscherm toe te voegen. Tik op Installeren en bevestig.',
+  ],
+};
 function setWelcome(show) {
   byId('welcome').hidden = !show;
   byId('reader').hidden = show;
@@ -254,6 +309,10 @@ function localize() {
   byId('welcome-label').textContent = values[3];
   const [enter, back, unavailable] = welcomeLabels[locale];
   byId('enter').textContent = enter;
+  const [install, iphone, android] = installLabels[locale];
+  byId('install-label').textContent = install;
+  byId('install-iphone').textContent = iphone;
+  byId('install-android').textContent = android;
   byId('back-welcome').textContent = back;
   byId('unavailable').textContent = unavailable;
   welcomeLanguage.value = locale;

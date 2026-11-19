@@ -1,5 +1,5 @@
 const cachePrefix = `advent-jpii:${self.registration.scope}:`;
-const cacheName = cachePrefix + 'v10-pwa7';
+const cacheName = cachePrefix + 'v10-pwa8';
 const appShell = new URL('./index.html', self.registration.scope).href;
 const assets = [
   appShell,
